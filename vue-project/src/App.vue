@@ -1,85 +1,74 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+  <v-app class="app">
+    <app-header v-if="irParaHome || isLoginPage" />
+    <v-main class="main-content">
+      <router-view />
+    </v-main>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+    
+    <app-footer v-if="irParaHome" />
+  </v-app>
 </template>
 
+
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import appHeader from './components/header.vue'
+
+const route = useRoute()
+const isLoginPage = computed(() => route.path === '/login')
+const irParaHome = computed(() => route.path === '/')
+ 
+</script>
+
+
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  text-align: center;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
+}
+
+
+nav {
+  display: flex;
+  gap: 1rem;
 }
 
 .logo {
-  display: block;
-  margin: 0 auto 2rem;
+  font-family: 'Georgia', serif;
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.rotas {
+  display: flex;
+  font-weight: 500;
+  justify-content: space-evenly;
 }
 
 nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  text-decoration: none;
+  color: #007dfa;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background 0.2s;
 }
 
-nav a:first-of-type {
-  border: 0;
+nav a:hover {
+  background-color: #e0b93e;
+  color: white;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.main {
+  padding: 1rem;
 }
 </style>
