@@ -172,7 +172,7 @@ const handleSubmit = async () => {
 .container {
   display: flex;
   width: 900px;
-  height: 550px;
+  height: 100%;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   overflow: hidden;

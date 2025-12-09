@@ -2,24 +2,22 @@
   <v-app-bar
     app
     flat
-    height="100"
-    color="deep-purple lighten-3"
+    height="80"
+    color="#ff7f00"  
+    dark
     class="header"
   >
-    <!-- Ícone do menu para mobile -->
-    <v-app-bar-nav-icon @click="drawer = !drawer" class="me-2" />
+    <!-- Ícone menu mobile -->
+    <v-app-bar-nav-icon @click="drawer = !drawer" />
 
     <!-- Logo -->
-    <v-toolbar-title
-      class="logo"
-      @click="irParaHome"
-    >
+    <v-toolbar-title class="logo" @click="goHome">
       CaféSabor
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
 
-    <!-- Links do menu (desktop) -->
+    <!-- Links desktop -->
     <v-btn
       text
       v-for="item in menuItems"
@@ -31,12 +29,12 @@
     </v-btn>
   </v-app-bar>
 
-  <!-- Drawer para mobile -->
+  <!-- Drawer mobile -->
   <v-navigation-drawer
     v-model="drawer"
     temporary
     right
-    color="deep-purple lighten-5"
+    color="#1a1a1a" 
     app
   >
     <v-list nav dense>
@@ -60,16 +58,10 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const drawer = ref(false)
 
-const irParaHome = () => {
-  router.push('/')
-}
+const goHome = () => router.push('/')
 
-// Menu principal
 const menuItems = [
   { title: 'Home', to: '/' },
-  { title: 'Cardápio', to: '/cardapio' },
-  { title: 'Sobre', to: '/sobre' },
-  { title: 'Contato', to: '/contato' },
   { title: 'Login', to: '/login' },
   { title: 'Cadastrar', to: '/cadastrar' },
 ]
@@ -79,23 +71,23 @@ const menuItems = [
 .header {
   font-family: 'Georgia', serif;
   font-weight: bold;
-  color: #fff8f0;
 }
 
 .logo {
   font-size: 1.8rem;
   cursor: pointer;
+  color: #fff;
 }
 
 .menu-btn {
-  color: #fff8f0;
+  color: #fff;
   font-weight: 600;
   transition: all 0.3s;
 }
 
 .menu-btn:hover {
-  color: #ffd699;
-  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+  background-color: #ffc266;
   border-radius: 8px;
 }
 
@@ -105,6 +97,6 @@ const menuItems = [
 
 .v-list-item-title {
   font-weight: 500;
-  color: #5d4037;
+  color: #ff7f00;
 }
 </style>

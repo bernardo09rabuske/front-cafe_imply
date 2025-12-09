@@ -1,74 +1,36 @@
 <template>
   <v-app class="app">
-    <app-header v-if="irParaHome || isLoginPage" />
+    <!-- Header, exceto na página de login -->
+    <app-header v-if="!isLoginPage" />
+
     <v-main class="main-content">
       <router-view />
     </v-main>
 
-    
-    <app-footer v-if="irParaHome" />
+    <!-- Footer opcional -->
+    <app-footer v-if="!isLoginPage" />
   </v-app>
 </template>
 
-
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import appHeader from './components/header.vue'
+import AppHeader from './components/header.vue'
+import AppFooter from './components/Footer.vue'
 
 const route = useRoute()
 const isLoginPage = computed(() => route.path === '/login')
-const irParaHome = computed(() => route.path === '/')
- 
 </script>
 
-
-
 <style scoped>
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  text-align: center;
-  color: #2c3e50;
-  margin: 0;
-  padding: 0;
+.app {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111; /* fundo preto */
+  color: #fff8f0;
+  min-height: 100vh;
 }
 
-
-nav {
-  display: flex;
-  gap: 1rem;
-}
-
-.logo {
-  font-family: 'Georgia', serif;
-  font-size: 1.8rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.rotas {
-  display: flex;
-  font-weight: 500;
-  justify-content: space-evenly;
-}
-
-nav a {
-  text-decoration: none;
-  color: #007dfa;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: background 0.2s;
-}
-
-nav a:hover {
-  background-color: #e0b93e;
-  color: white;
-}
-
-.main {
-  padding: 1rem;
+.main-content {
+  padding: 2rem;
 }
 </style>

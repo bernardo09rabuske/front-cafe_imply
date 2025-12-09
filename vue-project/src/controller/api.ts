@@ -1,50 +1,38 @@
+// src/controller/api.ts
 import axios from 'axios';
-import { jwtDecode } from "jwt-decode"
 import { forceLogout } from "../utils/logout";
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api';
 
 const api = axios.create({
-    baseURL: API_BASE,
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: false,
-})
+  baseURL: API_BASE,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: false,
+});
 
+// Attach token if present (no JWT decoding)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
-
     if (token) {
-      try {
-        const decoded: any = jwtDecode(token);
-
-        if (decoded.exp * 1000 < Date.now()) {
-          forceLogout();
-          return Promise.reject("Token expirado");
-        }
-
-        config.headers.Authorization = `Bearer ${token}`;
-      } catch {
-        forceLogout();
-        return Promise.reject("Token inválido");
-      }
+      // token do Sanctum é plainTextToken, não JWT — apenas anexa no header
+      config.headers = config.headers ?? {};
+      (config.headers as any).Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
-  response => response,
-
+  (response) => response,
   (error) => {
+    // Se backend retornar 401, força logout
     if (error.response?.status === 401) {
-      forceLogout();
+      try { forceLogout(); } catch (e) { console.error('Force logout falhou', e); }
     }
     return Promise.reject(error);
   }
 );
-
 
 export default api;
