@@ -1,102 +1,135 @@
 <template>
-  <v-app-bar
-    app
-    flat
-    height="80"
-    color="#ff7f00"  
-    dark
-    class="header"
-  >
-    <!-- Ícone menu mobile -->
-    <v-app-bar-nav-icon @click="drawer = !drawer" />
+  <v-app-bar app color="#1E1E1E" flat height="70">
+    <v-container class="d-flex align-center justify-space-between">
 
-    <!-- Logo -->
-    <v-toolbar-title class="logo" @click="goHome">
-      CaféSabor
-    </v-toolbar-title>
+      <!-- Logo / Título -->
+      <div class="d-flex align-center" style="gap: 8px;">
+        <v-icon size="32" color="white">mdi-coffee</v-icon>
+        <h2 class="text-white" style="margin: 0;">Café Manager</h2>
+      </div>
 
-    <v-spacer></v-spacer>
+      <!-- Infos do usuário + logout -->
+      <div class="d-flex align-center" style="gap: 16px;">
+        
+        <!-- Mostra usuário logado -->
+        <div class="text-right">
+          <div class="text-white text-subtitle-2">
+            {{ user?.nome }}
+          </div>
 
-    <!-- Links desktop -->
-    <v-btn
-      text
-      v-for="item in menuItems"
-      :key="item.title"
-      :to="item.to"
-      class="menu-btn"
-    >
-      {{ item.title }}
-    </v-btn>
+          <div class="text-grey text-caption">
+            {{ user?.isAdmin ? "Administrador" : "Usuário" }}
+          </div>
+        </div>
+
+        <!-- Avatar -->
+        <v-avatar size="40" color="deep-purple-accent-4">
+          <span class="white--text">
+            {{ user?.nome?.charAt(0)?.toUpperCase() }}
+          </span>
+        </v-avatar>
+
+        <!-- Logout -->
+        <v-btn color="red" variant="flat" @click="logout">
+          <v-icon start>mdi-logout</v-icon>
+          Sair
+        </v-btn>
+      </div>
+
+    </v-container>
   </v-app-bar>
-
-  <!-- Drawer mobile -->
-  <v-navigation-drawer
-    v-model="drawer"
-    temporary
-    right
-    color="#1a1a1a" 
-    app
-  >
-    <v-list nav dense>
-      <v-list-item
-        v-for="item in menuItems"
-        :key="item.title"
-        :to="item.to"
-        link
-        @click="drawer = false"
-      >
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
 </template>
 
+
+
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const drawer = ref(false)
+const user = ref<any>(null)
 
-const goHome = () => router.push('/')
+// Busca o usuário logado salvo no localStorage
+onMounted(() => {
+  const savedUser = localStorage.getItem("user")
+  if (savedUser) {
+    user.value = JSON.parse(savedUser)
+  }
+})
 
-const menuItems = [
-  { title: 'Home', to: '/' },
-  { title: 'Login', to: '/login' },
-  { title: 'Cadastrar', to: '/cadastrar' },
-]
+const logout = () => {
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
+  router.push("/login")
+}
 </script>
 
+
 <style scoped>
-.header {
-  font-family: 'Georgia', serif;
-  font-weight: bold;
+/* Container principal da App Bar */
+.v-app-bar {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid #2a2a2a;
 }
 
-.logo {
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.menu-btn {
-  color: #fff;
+/* Logo + ícone */
+h2 {
   font-weight: 600;
-  transition: all 0.3s;
+  letter-spacing: 0.5px;
 }
 
-.menu-btn:hover {
-  color: #000;
-  background-color: #ffc266;
-  border-radius: 8px;
+/* Texto branco */
+.text-white {
+  color: #ffffff !important;
 }
 
-.v-navigation-drawer {
-  font-family: 'Segoe UI', sans-serif;
+/* Texto cinza */
+.text-grey {
+  color: #b7b7b7 !important;
 }
 
-.v-list-item-title {
-  font-weight: 500;
-  color: #ff7f00;
+/* Área de usuário */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+/* Estilização do avatar */
+.v-avatar {
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Botão de logout */
+.v-btn {
+  transition: 0.25s ease;
+}
+
+.v-btn:hover {
+  background-color: #b71c1c !important;
+  transform: translateY(-2px);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 18px;
+  }
+  
+  .v-app-bar {
+    height: 60px !important;
+  }
+
+  .v-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem;
+  }
+
+  .v-btn {
+    font-size: 0.75rem !important;
+    padding: 0 10px !important;
+  }
 }
 </style>

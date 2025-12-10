@@ -73,40 +73,44 @@ const handleLogin = async () => {
   try {
     carregando.value = true;
 
+    // Chamada para API de login
     const resposta = await api.post('/auth/login', {
       email: email.value,
       senha: senha.value
     });
 
-    // Verifica token retornado
     const token = resposta?.data?.token;
-    if (token) {
+    const user = resposta?.data?.user;
+
+    if (token && user) {
+      // Salva token e usuário no localStorage
       localStorage.setItem('token', token);
-      // opcional: salvar também o usuário
-      localStorage.setItem('user', JSON.stringify(resposta.data.user ?? {}));
-       await router.push('/');
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Atualiza header do apiController para usar o token
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+      await router.push('/'); // redireciona para home
       return;
     }
 
-    
-    errorMsg.value = 'Resposta do servidor inválida. Tente novamente.';
-    console.error('Login: resposta sem token', resposta);
+    errorMsg.value = 'Resposta inválida do servidor.';
+    console.error('Login: resposta sem token ou usuário', resposta);
   } catch (e: any) {
     console.error('Erro no login:', e);
-    
+
     if (e.response) {
-     
       const msg = e.response.data?.error || e.response.data?.message || `Erro ${e.response.status}`;
       errorMsg.value = msg;
     } else {
-      
       errorMsg.value = 'Erro de conexão. Verifique sua API ou rede.';
     }
   } finally {
     carregando.value = false;
   }
-}
+};
 </script>
+
 
 
 <style scoped>
