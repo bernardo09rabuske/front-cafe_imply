@@ -3,14 +3,15 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import {toast} from "vue3-toastify";
+import 'vue3-toastify/dist/index.css';
 
-// 🔥 IMPORT VUETIFY
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
-// 🔥 IMPORT ICONES
+
 import '@mdi/font/css/materialdesignicons.css'
 
 const vuetify = createVuetify({

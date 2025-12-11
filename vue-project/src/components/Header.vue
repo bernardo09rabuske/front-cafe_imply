@@ -5,24 +5,27 @@
       <!-- Logo / Título -->
       <div class="d-flex align-center" style="gap: 8px;">
         <v-icon size="32" color="white">mdi-coffee</v-icon>
-        <h2 class="text-white" style="margin: 0;">Café Manager</h2>
+        <h2 class="text-white" style="margin: 0;">Trade Coffe</h2>
       </div>
 
       <!-- Infos do usuário + logout -->
       <div class="d-flex align-center" style="gap: 16px;">
         
-        <!-- Mostra usuário logado -->
         <div class="text-right">
-          <div class="text-white text-subtitle-2">
-            {{ user?.nome }}
-          </div>
+  <div class="text-white text-subtitle-2">
+    {{ user?.nome }}
+  </div>
 
-          <div class="text-grey text-caption">
-            {{ user?.isAdmin ? "Administrador" : "Usuário" }}
-          </div>
-        </div>
-
-        <!-- Avatar -->
+  </div>
+<div>
+<div class="navigation-links">
+          <v-btn text color="white" @click="$router.push('/')">Home</v-btn>
+          <v-btn text color="white" @click="$router.push('/admin')">Dashboard</v-btn>
+          <v-btn text color="white" @click="$router.push('/relatorios')">Relatórios</v-btn>
+          <v-btn text color="white" @click="$router.push('/historico')">Histórico</v-btn>
+</div>
+</div>
+        
         <v-avatar size="40" color="deep-purple-accent-4">
           <span class="white--text">
             {{ user?.nome?.charAt(0)?.toUpperCase() }}
